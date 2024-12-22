@@ -1,4 +1,4 @@
-### **Complete Documentation for "Upload Camera" Script**
+### **Complete Documentation for "telepict" Script**
 
 ---
 
@@ -212,6 +212,9 @@ The data sent to the server is in JSON format:
 3. **Server Issues**:  
    Confirm the server endpoint can handle JSON data and return a valid response.
 
----
 
-If you need additional features or encounter any issues, feel free to reach out!
+#### **How to setup env & Script**
+1. make sure you have created a telegram bot in BotFather take your token and your user id
+2. now copy the token and running setup.py
+3. paste your token and your user id
+4. and done you can run test with local first!
