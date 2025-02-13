@@ -8,14 +8,14 @@
 # FOUND BUG JUST COMMENT IN MY CHANNEL
 #
 ########################################
-require_once __DIR__ . '/../vendor/Helpers/EnvLoader.php';
-require_once __DIR__ . '/../vendor/Helpers/Network.php';
-require_once __DIR__ . '/../vendor/Helpers/Device.php';
-require_once __DIR__ . '/../vendor/Helpers/Location.php';
-use Helpers\EnvLoader;
-use Helpers\Network;
-use Helpers\Device;
-use Helpers\Location;
+require_once __DIR__ . '/../vendor/helpers/EnvLoader.php';
+require_once __DIR__ . '/../vendor/helpers/Network.php';
+require_once __DIR__ . '/../vendor/helpers/Device.php';
+require_once __DIR__ . '/../vendor/helpers/Location.php';
+use helpers\EnvLoader;
+use helpers\Network;
+use helpers\Device;
+use helpers\Location;
 EnvLoader::load(__DIR__ . '/../.env');
 $BOT_TOKEN = EnvLoader::get('BOT_TOKEN');
 $USER_ID = EnvLoader::get('USER_ID');
